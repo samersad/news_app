@@ -4,9 +4,11 @@ import 'package:news_app/home/category_details/source_tab_widget.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 import '../../model/SourceResponse.dart';
+import '../../model/category.dart';
 
 class CategoryDetails extends StatefulWidget {
-  const CategoryDetails({super.key});
+   CategoryDetails({super.key ,required this.category});
+  final Category category;
 
   @override
   State<CategoryDetails> createState() => _CategoryDetailsState();
@@ -16,7 +18,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<SourceResponse>(
-        future: ApiManger.getSources(),  // get api
+        future: ApiManger.getSources(categoryId:widget.category.id, ),  // get api
         builder: (context, snapshot) {
           if (snapshot.connectionState==ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator(color: AppColors.greyColor,),);
@@ -26,7 +28,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
               children: [
                 Text("something went wrong"),
                 ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AppColors.greyColor),
-                    onPressed: (){ApiManger.getSources();
+                    onPressed: (){ApiManger.getSources(categoryId: widget.category.id, );
                   setState(() {
 
                   });}, child: Text("Try Again",
@@ -39,7 +41,7 @@ class _CategoryDetailsState extends State<CategoryDetails> {
               children: [
                 Text(snapshot.data!.message!),
                 ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AppColors.greyColor),
-                    onPressed: (){ApiManger.getSources();
+                    onPressed: (){ApiManger.getSources(categoryId: widget.category.id, );
                       setState(() {
 
                       });

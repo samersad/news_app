@@ -18,8 +18,11 @@ class AppTheme {
           labelLarge: AppStyles.bold16Black,
           labelSmall: AppStyles.medium12Gray,
           labelMedium: AppStyles.medium14Black,
+          displaySmall: AppStyles.medium14White,
           headlineMedium: AppStyles.medium24Black,
-          headlineLarge: AppStyles.medium20Black)
+          headlineLarge: AppStyles.medium20Black,
+          displayLarge:  AppStyles.medium20White
+      )
 
   );
 
@@ -34,9 +37,14 @@ class AppTheme {
       textTheme: TextTheme(
           labelLarge: AppStyles.bold16White,
           labelMedium: AppStyles.medium14White,
+          displaySmall: AppStyles.medium14Black,
+
           labelSmall: AppStyles.medium12Gray,
           headlineMedium: AppStyles.medium24White,
-          headlineLarge: AppStyles.medium20White)
+          headlineLarge: AppStyles.medium20White,
+          displayLarge:  AppStyles.medium24Black
+
+      )
 
   );
 }

@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/home/home_screen.dart';
+import 'package:news_app/provider/theme_provider.dart';
 import 'package:news_app/utils/app_routes.dart';
 import 'package:news_app/utils/app_theme.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
-  runApp( const MyApp());
+  runApp(  MultiProvider(
+      providers: [
+    ChangeNotifierProvider(create: (context) => ThemeProvider(),)
+  ],
+      child: MyApp()));
 }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,6 +19,8 @@ class MyApp extends StatelessWidget {
 // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var themeProvider=Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.homeRouteName,
@@ -21,7 +29,7 @@ class MyApp extends StatelessWidget {
         },
     theme: AppTheme.lightTheme,
     darkTheme: AppTheme.darkTheme,
-    themeMode: ThemeMode.light,
+    themeMode: themeProvider.appTheme,
     );
   }
 }
