@@ -7,11 +7,13 @@ class DividerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width=MediaQuery.of(context).size.width;
-    var height=MediaQuery.of(context).size.height;
-    return  Divider(color:
-    AppColors.whiteColor,
-      indent: width*0.04,endIndent: width*0.04,thickness: 2,);
-    ;
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    return Divider(
+      color: AppColors.whiteColor,
+      indent: width * 0.04,
+      endIndent: width * 0.04,
+      thickness: 2,
+    );
   }
 }

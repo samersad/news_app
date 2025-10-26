@@ -10,7 +10,7 @@ import 'category_fragment/category_fragment.dart';
 import 'drawer/drawer_widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -29,28 +29,29 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: isSearchOpen
             ? CustomTextFormField(
-          onChanged: (newText) {
-            searchByNewText(newText);
-          },
-          controller: searchController,
-          hintText: "Search...",
-          prefixIconName: Icon(Icons.search, color: Theme.of(context).splashColor),
-          suffixIconName: IconButton(
-            icon: Icon(Icons.close, color: Theme.of(context).splashColor),
-            onPressed: () {
-              setState(() {
-                isSearchOpen = false;
-                searchController.clear();
-              });
-            },
-          ),
-        )
+                onChanged: (newText) {
+                  searchByNewText(newText);
+                },
+                controller: searchController,
+                hintText: "Search...",
+                prefixIconName: Icon(
+                  Icons.search,
+                  color: Theme.of(context).splashColor,
+                ),
+                suffixIconName: IconButton(
+                  icon: Icon(Icons.close, color: Theme.of(context).splashColor),
+                  onPressed: () {
+                    setState(() {
+                      isSearchOpen = false;
+                      searchController.clear();
+                    });
+                  },
+                ),
+              )
             : Text(
-          selectedCategory == null
-              ? "Home"
-              : selectedCategory!.title!,
-          style: Theme.of(context).textTheme.headlineLarge,
-        ),
+                selectedCategory == null ? "Home" : selectedCategory!.title,
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
         actions: [
           if (!isSearchOpen)
             IconButton(
@@ -68,8 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
 
-      drawer:
-      DrawerWidget(onDrawerItemClick: onDrawerItemClick),
+      drawer: DrawerWidget(onDrawerItemClick: onDrawerItemClick),
 
       body: selectedCategory == null
           ? CategoryFragment(onCategoryItemClick: onCategoryItemClick)
@@ -87,13 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pop(context);
     setState(() {});
   }
-  List<dynamic> _searchResults = [];
-  String _currentQuery = '';
+
+  final List<dynamic> _searchResults = [];
+  final String _currentQuery = '';
 
   void searchByNewText(String newText) {
     ApiManger.getNews(q: newText);
-    setState(() {
-
-    });
+    setState(() {});
   }
 }
