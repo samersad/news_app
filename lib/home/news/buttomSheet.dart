@@ -53,21 +53,13 @@ class NewsBottomSheet {
               SizedBox(height: height*0.012),
 
               ElevatedButton(
+                // launchUrl need uri ana m3ya String  fa ahol men String to uri by parse
                 onPressed: () async {
-                  final Uri uri = Uri.parse(news.url ?? "");
-                  try {
-                    final bool launched = await launchUrl(uri, mode: LaunchMode.inAppWebView);
-                    if (!launched) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Could not launch the article link")),
-                      );
-                    }
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(e.toString())),
-                    );
-                  }
-                },
+             final Uri uri = Uri.parse(news.url ?? "");
+
+             await launchUrl(uri, mode: LaunchMode.inAppWebView);
+            },
+
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColor,
                   padding: const EdgeInsets.symmetric(vertical: 20),

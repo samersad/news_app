@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app/model/NewsResponse.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class NewsItem extends StatelessWidget {
   const NewsItem({super.key, required this.news});
@@ -12,6 +13,9 @@ class NewsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
+    DateTime? publishedTime;
+        publishedTime = DateTime.parse(news.publishedAt!);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: width * 0.04),
       decoration: BoxDecoration(
@@ -50,7 +54,11 @@ class NewsItem extends StatelessWidget {
                     style: AppStyles.medium12Gray,
                   ),
                 ),
-                Text(news.publishedAt ?? "", style: AppStyles.medium12Gray),
+                Text(
+                  timeago.format(publishedTime),
+
+                  style: AppStyles.medium12Gray,
+                ),
               ],
             ),
           ],
