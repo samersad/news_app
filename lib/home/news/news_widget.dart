@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:news_app/home/news/buttomSheet.dart';
 import 'package:news_app/model/SourceResponse.dart';
 import 'package:news_app/utils/app_colors.dart';
-
 import '../../api/api_manger.dart';
 import 'news_item.dart';
 
 class NewsWidget extends StatefulWidget {
   final Source source;
-  const NewsWidget({super.key, required this.source});
+  final String searchQuery;
+
+  const NewsWidget({
+    super.key,
+    required this.source,
+    required this.searchQuery
+  });
 
   @override
   State<NewsWidget> createState() => _NewsWidgetState();
@@ -17,61 +22,28 @@ class NewsWidget extends StatefulWidget {
 class _NewsWidgetState extends State<NewsWidget> {
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
     return FutureBuilder(
-      future: ApiManger.getNews(sourceId: widget.source.id ?? ""),
+      future: ApiManger.getNews(
+        sourceId: widget.source.id ?? "",
+        q: widget.searchQuery,
+      ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(color: AppColors.greyColor),
           );
         } else if (snapshot.hasError) {
-          return Column(
-            children: [
-              Text("something went wrong"),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.greyColor,
-                ),
-                onPressed: () {
-                  ApiManger.getNews(sourceId: widget.source.id ?? "");
-                  setState(() {});
-                },
-                child: Text(
-                  "Try Again",
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ),
-            ],
-          );
+          return _buildError("Something went wrong");
         }
-        if (snapshot.data!.status != "ok") {
-          return Column(
-            children: [
-              Text(snapshot.data!.message!),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.greyColor,
-                ),
-                onPressed: () {
-                  ApiManger.getNews(sourceId: widget.source.id ?? "");
-                  setState(() {});
-                },
-                child: Text(
-                  "Try Again",
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-              ),
-            ],
-          );
+
+        if (snapshot.data?.status != "ok") {
+          return _buildError(snapshot.data?.message ?? "Server error");
         }
+
         var newsList = snapshot.data!.articles ?? [];
         return ListView.separated(
-          padding: EdgeInsets.only(top: height * 0.02),
-          separatorBuilder: (context, index) {
-            return SizedBox(height: height * 0.02);
-          },
+          padding: const EdgeInsets.only(top: 10),
+          separatorBuilder: (context, index) => const SizedBox(height: 10),
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
@@ -83,6 +55,26 @@ class _NewsWidgetState extends State<NewsWidget> {
           itemCount: newsList.length,
         );
       },
+    );
+  }
+
+  Widget _buildError(String message) {
+    return Column(
+      children: [
+        Text(message),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.greyColor,
+          ),
+          onPressed: () {
+            setState(() {});
+          },
+          child: Text(
+            "Try Again",
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+        ),
+      ],
     );
   }
 }

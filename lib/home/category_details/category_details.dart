@@ -7,8 +7,9 @@ import '../../model/SourceResponse.dart';
 import '../../model/category.dart';
 
 class CategoryDetails extends StatefulWidget {
-  const CategoryDetails({super.key, required this.category});
+  const CategoryDetails({super.key, required this.category, required this.searchQuery});
   final Category category;
+  final String searchQuery; // 👈 هنا
 
   @override
   State<CategoryDetails> createState() => _CategoryDetailsState();
@@ -67,7 +68,9 @@ class _CategoryDetailsState extends State<CategoryDetails> {
           );
         }
         List<Source>? sourceList = snapshot.data?.sources ?? [];
-        return SourceTapWidget(sourcesList: sourceList);
+        return SourceTapWidget(sourcesList: sourceList,
+          searchQuery: widget.searchQuery,
+        );
       },
     );
   }

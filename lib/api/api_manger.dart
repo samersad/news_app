@@ -9,7 +9,7 @@ import 'api_constants.dart';
 class ApiManger{
   //https://newsapi.org/v2/top-headlines/sources?apiKey=6c3d95648f21488da14510b0df98ffac
   static Future<SourceResponse> getSources({required String categoryId, String q="" }) async {
-    Uri url=Uri.http(ApiConstants.baseUrl,EndPoints.sourceApi, {
+    Uri url=Uri.https(ApiConstants.baseUrl,EndPoints.sourceApi, {
       "apiKey": ApiConstants.apiKey,
       "category":categoryId,
       "q":q
@@ -28,7 +28,7 @@ class ApiManger{
   }
 
   static Future<NewsResponse> getNews({String sourceId="",String q=""}) async {
-    Uri uri=Uri.http(ApiConstants.baseUrl,EndPoints.newsApi,{
+    Uri uri=Uri.https(ApiConstants.baseUrl,EndPoints.newsApi,{
       "apiKey":ApiConstants.apiKey,
       "sources":sourceId,
       "q":q

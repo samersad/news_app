@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manger.dart';
+import 'package:news_app/model/NewsResponse.dart';
 import '../model/category.dart';
 import '../utils/custom_text_form_field.dart';
 import 'category_details/category_details.dart';
@@ -24,31 +25,37 @@ class _HomeScreenState extends State<HomeScreen> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: isSearchOpen
+        title: selectedCategory == null ?
+        SizedBox()
+            :
+        isSearchOpen
             ? CustomTextFormField(
-                onChanged: (newText) {
-                  searchByNewText(newText);
-                },
-                controller: searchController,
-                hintText: "Search...",
-                prefixIconName: Icon(
-                  Icons.search,
-                  color: Theme.of(context).splashColor,
-                ),
-                suffixIconName: IconButton(
-                  icon: Icon(Icons.close, color: Theme.of(context).splashColor),
-                  onPressed: () {
-                    setState(() {
-                      isSearchOpen = false;
-                      searchController.clear();
-                    });
-                  },
-                ),
-              )
+          onChanged: (_) {
+            setState(() {
+
+            });
+          },
+          controller: searchController,
+          hintText: "Search...",
+          prefixIconName: Icon(
+            Icons.search,
+            color: Theme.of(context).splashColor,
+          ),
+          suffixIconName: IconButton(
+            icon: Icon(Icons.close, color: Theme.of(context).splashColor),
+            onPressed: () {
+              setState(() {
+                isSearchOpen = false;
+                searchController.clear();
+              });
+            },
+          ),
+        )
             : Text(
-                selectedCategory == null ? "Home" : selectedCategory!.title,
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
+          selectedCategory == null ? "Home" : selectedCategory!.title,
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+
         actions: [
           if (!isSearchOpen)
             IconButton(
@@ -58,9 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
               icon: Icon(
-                Icons.search,
-                size: 30,
-                color: Theme.of(context).splashColor,
+                Icons.search, size: 30, color: Theme.of(context).splashColor,
               ),
             ),
         ],
@@ -70,8 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
       body: selectedCategory == null
           ? CategoryFragment(onCategoryItemClick: onCategoryItemClick)
-          : CategoryDetails(category: selectedCategory!),
-    );
+          : CategoryDetails(
+        category: selectedCategory!,
+        searchQuery: searchController.text,
+      ),    );
   }
 
   void onCategoryItemClick(Category newSelectedCategory) {
@@ -82,14 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void onDrawerItemClick() {
     selectedCategory = null;
     Navigator.pop(context);
-    setState(() {});
-  }
-
-  final List<dynamic> _searchResults = [];
-  final String _currentQuery = '';
-
-  void searchByNewText(String newText) {
-    ApiManger.getNews(q: newText);
     setState(() {});
   }
 }
