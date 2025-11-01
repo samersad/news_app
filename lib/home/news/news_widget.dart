@@ -3,7 +3,7 @@ import 'package:news_app/home/news/buttomSheet.dart';
 import 'package:news_app/model/SourceResponse.dart';
 import 'package:news_app/utils/app_colors.dart';
 
-import '../../api/api_manger.dart';
+import '../../api/dio_api_manger.dart';
 import 'news_item.dart';
 
 class NewsWidget extends StatefulWidget {
@@ -20,7 +20,7 @@ class _NewsWidgetState extends State<NewsWidget> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return FutureBuilder(
-      future: ApiManger.getNews(sourceId: widget.source.id ?? ""),
+      future: DioApiManger().getNews(sourceId: widget.source.id ?? ""),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -28,14 +28,15 @@ class _NewsWidgetState extends State<NewsWidget> {
           );
         } else if (snapshot.hasError) {
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text("something went wrong"),
+              Text("something went wrong",style: Theme.of(context).textTheme.headlineMedium,),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.greyColor,
                 ),
                 onPressed: () {
-                  ApiManger.getNews(sourceId: widget.source.id ?? "");
+                  DioApiManger().getNews(sourceId: widget.source.id ?? "");
                   setState(() {});
                 },
                 child: Text(
@@ -55,7 +56,7 @@ class _NewsWidgetState extends State<NewsWidget> {
                   backgroundColor: AppColors.greyColor,
                 ),
                 onPressed: () {
-                  ApiManger.getNews(sourceId: widget.source.id ?? "");
+                  DioApiManger().getNews(sourceId: widget.source.id ?? "");
                   setState(() {});
                 },
                 child: Text(

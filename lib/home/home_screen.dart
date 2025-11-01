@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/api/api_manger.dart';
+import 'package:news_app/api/dio_api_manger.dart';
 import '../model/category.dart';
 import '../utils/custom_text_form_field.dart';
 import 'category_details/category_details.dart';
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final String _currentQuery = '';
 
   void searchByNewText(String newText) {
-    ApiManger.getNews(q: newText);
+    DioApiManger().getNews(q: newText);
     setState(() {});
   }
 }

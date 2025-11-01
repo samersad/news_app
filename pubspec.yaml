@@ -40,8 +40,9 @@ dependencies:
   cached_network_image: ^3.4.1
   provider: ^6.1.5+1
   url_launcher: ^6.3.2
-  infinite_scroll_pagination: ^5.1.1
   timeago: ^3.7.1
+  dio: ^5.9.0
+  pretty_dio_logger: ^1.4.0
 
 dev_dependencies:
   flutter_test:
