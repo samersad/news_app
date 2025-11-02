@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app/model/NewsResponse.dart';
 import 'package:news_app/utils/app_colors.dart';
 import 'package:news_app/utils/app_styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../../api/model/ news/news.dart';
 
 class NewsItem extends StatelessWidget {
   const NewsItem({super.key, required this.news});

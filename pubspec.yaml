@@ -43,6 +43,9 @@ dependencies:
   infinite_scroll_pagination: ^5.1.1
   timeago: ^3.7.1
   dio: ^5.9.0
+  retrofit: ^4.8.0
+  logger: ^2.6.2
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +57,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  retrofit_generator: ^10.1.1
+  build_runner: ^2.10.1
+  json_serializable: ^6.11.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

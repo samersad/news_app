@@ -1,11 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/api/api_constants.dart';
 import 'package:news_app/api/api_manger.dart';
+import 'package:news_app/api/retrofit_services.dart';
 import 'package:news_app/home/category_details/source_tab_widget.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 import '../../model/SourceResponse.dart';
 import '../../model/category.dart';
-
+import 'package:dio/dio.dart';
 class CategoryDetails extends StatefulWidget {
   const CategoryDetails({super.key, required this.category, required this.searchQuery});
   final Category category;
@@ -18,8 +21,9 @@ class CategoryDetails extends StatefulWidget {
 class _CategoryDetailsState extends State<CategoryDetails> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SourceResponse>(
-      future: ApiManger.getSources(categoryId: widget.category.id), // get api
+    return FutureBuilder(
+      future: RetrofitServices(Dio()).getSources(ApiConstants.apiKey,
+          widget.category.id), // get api
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(

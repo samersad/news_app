@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/api/api_constants.dart';
+import 'package:news_app/api/retrofit_services.dart';
 import 'package:news_app/home/news/buttomSheet.dart';
-import 'package:news_app/model/SourceResponse.dart';
 import 'package:news_app/utils/app_colors.dart';
 import '../../api/api_manger.dart';
+import '../../api/model/source.dart';
 import 'news_item.dart';
 
 class NewsWidget extends StatefulWidget {
@@ -23,10 +26,8 @@ class _NewsWidgetState extends State<NewsWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ApiManger.getNews(
-        sourceId: widget.source.id ?? "",
-        q: widget.searchQuery,
-      ),
+      future: RetrofitServices(Dio()).getNews(ApiConstants.apiKey,
+          widget.source.id??""),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -67,6 +68,8 @@ class _NewsWidgetState extends State<NewsWidget> {
             backgroundColor: AppColors.greyColor,
           ),
           onPressed: () {
+            RetrofitServices(Dio()).getNews(ApiConstants.apiKey,
+                widget.source.id??"");
             setState(() {});
           },
           child: Text(
