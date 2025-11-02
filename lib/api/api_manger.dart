@@ -27,20 +27,22 @@ class ApiManger{
 
   }
 
-  static Future<NewsResponse> getNews({String sourceId="",String q=""}) async {
-    Uri uri=Uri.https(ApiConstants.baseUrl,EndPoints.newsApi,{
-      "apiKey":ApiConstants.apiKey,
-      "sources":sourceId,
-      "q":q
-
+  static Future<NewsResponse> getNews({
+    String sourceId = "", String q = "", int page = 1, int pageSize = 20,
+  }) async {
+    Uri uri = Uri.https(ApiConstants.baseUrl, EndPoints.newsApi, {
+      "apiKey": ApiConstants.apiKey,
+      "sources": sourceId,
+      "q": q,
+      "page": "$page",
+      "pageSize": "$pageSize",
     });
- try{
-   var response= await http.get(uri);
-   var responseBody=response.body;
-   var  json=jsonDecode(responseBody);
-   return NewsResponse.fromJson(json);
- }catch(e){
-   rethrow ;
-     }
+    try {
+      var response = await http.get(uri);
+      var json = jsonDecode(response.body);
+      return NewsResponse.fromJson(json);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:news_app/api/api_manger.dart';
 import 'package:news_app/home/news/buttomSheet.dart';
+import 'package:news_app/model/NewsResponse.dart';
 import 'package:news_app/model/SourceResponse.dart';
 import 'package:news_app/utils/app_colors.dart';
-import '../../api/api_manger.dart';
 import 'news_item.dart';
 
 class NewsWidget extends StatefulWidget {
@@ -12,7 +14,7 @@ class NewsWidget extends StatefulWidget {
   const NewsWidget({
     super.key,
     required this.source,
-    required this.searchQuery
+    required this.searchQuery,
   });
 
   @override
@@ -20,54 +22,92 @@ class NewsWidget extends StatefulWidget {
 }
 
 class _NewsWidgetState extends State<NewsWidget> {
+  static const _pageSize = 20;
+
+  final PagingController<int, News> _pagingController =
+  PagingController(firstPageKey: 1);
+
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: ApiManger.getNews(
-        sourceId: widget.source.id ?? "",
-        q: widget.searchQuery,
-      ),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(color: AppColors.greyColor),
-          );
-        } else if (snapshot.hasError) {
-          return _buildError("Something went wrong");
-        }
+  void initState() {
+    super.initState();
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+  }
+  @override
+  void didUpdateWidget(covariant NewsWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
-        if (snapshot.data?.status != "ok") {
-          return _buildError(snapshot.data?.message ?? "Server error");
-        }
-
-        var newsList = snapshot.data!.articles ?? [];
-        return ListView.separated(
-          padding: const EdgeInsets.only(top: 10),
-          separatorBuilder: (context, index) => const SizedBox(height: 10),
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                NewsBottomSheet.showButtonSheet(context, newsList[index]);
-              },
-              child: NewsItem(news: newsList[index]),
-            );
-          },
-          itemCount: newsList.length,
-        );
-      },
-    );
+    if (oldWidget.source.id != widget.source.id ||
+        oldWidget.searchQuery != widget.searchQuery) {
+      _pagingController.refresh();
+    }
   }
 
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final newsResponse = await ApiManger.getNews(
+        sourceId: widget.source.id ?? "",
+        q: widget.searchQuery,
+        page: pageKey,
+        pageSize: _pageSize,
+      );
+
+      final newItems = newsResponse.articles ?? [];
+
+      final isLastPage = newItems.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + 1;
+        _pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      _pagingController.error = error;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PagedListView<int, News>(
+      pagingController: _pagingController,
+      padding: const EdgeInsets.only(top: 10),
+      builderDelegate: PagedChildBuilderDelegate<News>(
+        itemBuilder: (context, article, index) => InkWell(
+          onTap: () => NewsBottomSheet.showButtonSheet(context, article),
+          child: NewsItem(news: article),
+        ),
+        newPageProgressIndicatorBuilder: (context) => const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Center(child: Column(
+            children: [
+              CircularProgressIndicator(color: AppColors.redColor),
+              Text("Loading"
+              )
+            ],
+          )
+          ),
+        ),
+        firstPageErrorIndicatorBuilder: (context) => _buildError("Something went wrong"),
+        newPageErrorIndicatorBuilder: (context) => _buildError("Failed to load more news"),
+      ),
+    );
+  }
   Widget _buildError(String message) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(message),
+        const SizedBox(height: 8),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.greyColor,
           ),
           onPressed: () {
-            setState(() {});
+            ApiManger.getNews(sourceId: widget.source.id ?? "",
+              q: widget.searchQuery,);
+            _pagingController.refresh();
           },
           child: Text(
             "Try Again",
@@ -76,5 +116,11 @@ class _NewsWidgetState extends State<NewsWidget> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
   }
 }
