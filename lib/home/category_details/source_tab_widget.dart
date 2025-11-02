@@ -5,10 +5,12 @@ import 'package:news_app/model/SourceResponse.dart';
 import 'package:news_app/utils/app_colors.dart';
 
 class SourceTapWidget extends StatefulWidget {
-   SourceTapWidget({super.key,required this.sourcesList,});
+   SourceTapWidget({super.key,required this.sourcesList, required this.searchQuery,});
     List<Source> sourcesList;
+   final String searchQuery;
 
-  @override
+
+   @override
   State<SourceTapWidget> createState() => _SourceTapWidgetState();
 }
 
@@ -34,7 +36,8 @@ class _SourceTapWidgetState extends State<SourceTapWidget> {
               return SourceName(source: source, isSelected: selectedIndex==widget.sourcesList.indexOf(source));
             },).toList()
             ),
-            Expanded(child: NewsWidget(source: widget.sourcesList[selectedIndex]))
+            Expanded(child: NewsWidget(source: widget.sourcesList[selectedIndex],
+                searchQuery: widget.searchQuery))
           ],
 
         ));

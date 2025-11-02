@@ -8,9 +8,11 @@ import 'package:news_app/model/SourceResponse.dart';
 import 'api_constants.dart';
 class ApiManger{
   //https://newsapi.org/v2/top-headlines/sources?apiKey=6c3d95648f21488da14510b0df98ffac
-  static Future<SourceResponse> getSources() async {
-    Uri url=Uri.http(ApiConstants.baseUrl,EndPoints.sourceApi, {
-      "apiKey": ApiConstants.apiKey
+  static Future<SourceResponse> getSources({required String categoryId, String q="" }) async {
+    Uri url=Uri.https(ApiConstants.baseUrl,EndPoints.sourceApi, {
+      "apiKey": ApiConstants.apiKey,
+      "category":categoryId,
+      "q":q
     });
     try{
       var response=await http.get(url);
@@ -25,18 +27,22 @@ class ApiManger{
 
   }
 
-  static Future<NewsResponse> getNews(String sourceId) async {
-    Uri uri=Uri.http(ApiConstants.baseUrl,EndPoints.newsApi,{
-      "apiKey":ApiConstants.apiKey,
-      "sources":sourceId
+  static Future<NewsResponse> getNews({
+    String sourceId = "", String q = "", int page = 1, int pageSize = 20,
+  }) async {
+    Uri uri = Uri.https(ApiConstants.baseUrl, EndPoints.newsApi, {
+      "apiKey": ApiConstants.apiKey,
+      "sources": sourceId,
+      "q": q,
+      "page": "$page",
+      "pageSize": "$pageSize",
     });
- try{
-   var response= await http.get(uri);
-   var responseBody=response.body;
-   var  json=jsonDecode(responseBody);
-   return NewsResponse.fromJson(json);
- }catch(e){
-   rethrow ;
-     }
+    try {
+      var response = await http.get(uri);
+      var json = jsonDecode(response.body);
+      return NewsResponse.fromJson(json);
+    } catch (e) {
+      rethrow;
+    }
   }
 }
