@@ -37,9 +37,6 @@ class _NewsWidgetState extends State<NewsWidget> {
           return _buildError("Something went wrong");
         }
 
-        if (snapshot.data?.status != "ok") {
-          return _buildError(snapshot.data?.message ?? "Server error");
-        }
 
         var newsList = snapshot.data!.articles ?? [];
         return ListView.separated(
@@ -48,7 +45,7 @@ class _NewsWidgetState extends State<NewsWidget> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                NewsBottomSheet.showButtonSheet(context, newsList[index]);
+                NewsBottomSheet.showButtonSheet(context, newsList[index] );
               },
               child: NewsItem(news: newsList[index]),
             );

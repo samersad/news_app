@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/api/api_manger.dart';
-import 'package:news_app/model/NewsResponse.dart';
 import '../model/category.dart';
 import '../utils/custom_text_form_field.dart';
 import 'category_details/category_details.dart';

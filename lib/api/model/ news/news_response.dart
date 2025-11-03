@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:news_app/api/model/%20news/news.dart';
+
+import 'news.dart';
 
 part 'news_response.g.dart';
 
@@ -26,6 +27,7 @@ class NewsResponse {
     return _$NewsResponseToJson(this);
   }
 }
+
 
 
 

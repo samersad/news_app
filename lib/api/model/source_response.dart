@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:news_app/api/model/source.dart';
 
-import '../../model/SourceResponse.dart';
-
 part 'source_response.g.dart';
 
 @JsonSerializable()

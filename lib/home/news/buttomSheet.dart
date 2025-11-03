@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app/model/NewsResponse.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../api/model/ news/news.dart';
 import '../../utils/app_colors.dart';
 
 class NewsBottomSheet {

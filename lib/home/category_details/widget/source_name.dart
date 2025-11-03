@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/model/SourceResponse.dart';
+
+import '../../../api/model/source.dart';
 
 class SourceName extends StatelessWidget {
    SourceName({super.key,required this.source,required this.isSelected});

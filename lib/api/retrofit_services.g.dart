@@ -22,10 +22,7 @@ class _RetrofitServices implements RetrofitServices {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<SourceResponse>> getSources(
-    String apiKey,
-    String categoryId,
-  ) async {
+  Future<SourceResponse> getSources(String apiKey, String categoryId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'apiKey': apiKey,
@@ -33,7 +30,7 @@ class _RetrofitServices implements RetrofitServices {
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<SourceResponse>>(
+    final _options = _setStreamType<SourceResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -43,14 +40,10 @@ class _RetrofitServices implements RetrofitServices {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<SourceResponse> _value;
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SourceResponse _value;
     try {
-      _value = _result.data!
-          .map(
-            (dynamic i) => SourceResponse.fromJson(i as Map<String, dynamic>),
-          )
-          .toList();
+      _value = SourceResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

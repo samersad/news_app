@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:news_app/api/end_points.dart';
-import 'package:news_app/model/NewsResponse.dart';
-import 'package:news_app/model/SourceResponse.dart';
 
 import 'api_constants.dart';
+import 'model/ news/news_response.dart';
+import 'model/source.dart';
 class ApiManger{
   //https://newsapi.org/v2/top-headlines/sources?apiKey=6c3d95648f21488da14510b0df98ffac
-  static Future<SourceResponse> getSources({required String categoryId, String q="" }) async {
+  static Future<Source> getSources({required String categoryId, String q="" }) async {
     Uri url=Uri.https(ApiConstants.baseUrl,EndPoints.sourceApi, {
       "apiKey": ApiConstants.apiKey,
       "category":categoryId,
@@ -19,7 +19,7 @@ class ApiManger{
       // String responseBody= response.body;  //string to json >>>>>>json to object
       // var json= jsonDecode(responseBody);
       // Source.fromJson(json);
-      return SourceResponse.fromJson(jsonDecode(response.body));
+      return Source.fromJson(jsonDecode(response.body));
     }
     catch(e){
       rethrow ;
