@@ -43,6 +43,8 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   timeago: ^3.7.1
   pretty_dio_logger: ^1.4.0
+  bloc: ^9.1.0
+  flutter_bloc: ^9.1.1
 
 
 dev_dependencies:
